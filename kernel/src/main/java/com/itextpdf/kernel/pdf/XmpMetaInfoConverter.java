@@ -128,11 +128,12 @@ class XmpMetaInfoConverter {
                 if (PdfName.Title.equals(key)) {
                     xmpMeta.setLocalizedText(XMPConst.NS_DC, PdfConst.Title, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT, value);
                 } else if (PdfName.Author.equals(key)) {
-                    for (String v : value.split(",|;")) {
+                   // for (String v : value.split(",|;")) {
+                		String v = value;
                         if (v.trim().length() > 0) {
                             appendArrayItemIfDoesNotExist(xmpMeta, XMPConst.NS_DC, PdfConst.Creator, v.trim(), PropertyOptions.ARRAY_ORDERED);
                         }
-                    }
+                   // }
                 } else if (PdfName.Subject.equals(key)) {
                     xmpMeta.setLocalizedText(XMPConst.NS_DC, PdfConst.Description, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT, value);
                 } else if (PdfName.Keywords.equals(key)) {
