@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -283,17 +284,18 @@ public class LtvVerification {
         ValidationData vd = new ValidationData();
         if (ocsps != null) {
             for (byte[] ocsp : ocsps) {
-                vd.ocsps.add(buildOCSPResponse(ocsp));
+                byte[] oCSPResponse = buildOCSPResponse(ocsp);
+                vd.ocsps.add(oCSPResponse);
             }
         }
         if (crls != null) {
             for (byte[] crl : crls) {
-                vd.crls.add(crl);
+            	vd.crls.add(crl);
             }
         }
         if (certs != null) {
             for (byte[] cert : certs) {
-                vd.certs.add(cert);
+             	vd.certs.add(cert);
             }
         }
         validated.put(getSignatureHashKey(signatureName), vd);
@@ -306,6 +308,17 @@ public class LtvVerification {
         ResponseBytes responseBytes = new ResponseBytes(OCSPObjectIdentifiers.id_pkix_ocsp_basic, doctet);
         OCSPResponse ocspResponse = new OCSPResponse(respStatus, responseBytes);
         return new OCSPResp(ocspResponse).getEncoded();
+    }
+    
+    private boolean containsByteArray(Collection<byte[]> coll, byte[] elem) {
+    	
+    	final Iterator<byte[]> iter = coll.iterator();
+    	while (iter.hasNext()) {
+    		final byte[] currElem = iter.next();
+    		if (Arrays.equals(elem, currElem) )
+    			return true;
+    	}
+    	return false;
     }
 
     private PdfName getSignatureHashKey(String signatureName) throws NoSuchAlgorithmException, IOException {
