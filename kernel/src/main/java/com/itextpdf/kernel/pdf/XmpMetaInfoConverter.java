@@ -56,88 +56,88 @@ class XmpMetaInfoConverter {
     private XmpMetaInfoConverter() {
     }
 
-    static void appendMetadataToInfo(byte[] xmpMetadata, PdfDocumentInfo info) {
+    static void appendMetadataToInfo(final byte[] xmpMetadata, final PdfDocumentInfo info) {
         if (xmpMetadata != null) {
             try {
-                XMPMeta meta = XMPMetaFactory.parseFromBuffer(xmpMetadata);
+                final XMPMeta meta = XMPMetaFactory.parseFromBuffer(xmpMetadata);
 
-                XMPProperty title = meta.getLocalizedText(XMPConst.NS_DC, PdfConst.Title, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT);
+                final XMPProperty title = meta.getLocalizedText(XMPConst.NS_DC, PdfConst.Title, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT);
                 if (title != null) {
                     info.setTitle(title.getValue());
                 }
 
-                String author = fetchArrayIntoString(meta, XMPConst.NS_DC, PdfConst.Creator);
+                final String author = fetchArrayIntoString(meta, XMPConst.NS_DC, PdfConst.Creator);
                 if (author != null) {
                     info.setAuthor(author);
                 }
 
                 // We assume that pdf:keywords has precedence over dc:subject
-                XMPProperty keywords = meta.getProperty(XMPConst.NS_PDF, PdfConst.Keywords);
+                final XMPProperty keywords = meta.getProperty(XMPConst.NS_PDF, PdfConst.Keywords);
                 if (keywords != null) {
                     info.setKeywords(keywords.getValue());
                 } else {
-                    String keywordsStr = fetchArrayIntoString(meta, XMPConst.NS_DC, PdfConst.Subject);
+                    final String keywordsStr = fetchArrayIntoString(meta, XMPConst.NS_DC, PdfConst.Subject);
                     if (keywordsStr != null) {
                         info.setKeywords(keywordsStr);
                     }
                 }
 
-                XMPProperty subject = meta.getLocalizedText(XMPConst.NS_DC, PdfConst.Description, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT);
+                final XMPProperty subject = meta.getLocalizedText(XMPConst.NS_DC, PdfConst.Description, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT);
                 if (subject != null) {
                     info.setSubject(subject.getValue());
                 }
 
-                XMPProperty creator = meta.getProperty(XMPConst.NS_XMP, PdfConst.CreatorTool);
+                final XMPProperty creator = meta.getProperty(XMPConst.NS_XMP, PdfConst.CreatorTool);
                 if (creator != null) {
                     info.setCreator(creator.getValue());
                 }
 
-                XMPProperty producer = meta.getProperty(XMPConst.NS_PDF, PdfConst.Producer);
+                final XMPProperty producer = meta.getProperty(XMPConst.NS_PDF, PdfConst.Producer);
                 if (producer != null) {
                     info.put(PdfName.Producer, new PdfString(producer.getValue(), PdfEncodings.UNICODE_BIG));
                 }
 
-                XMPProperty trapped = meta.getProperty(XMPConst.NS_PDF, PdfConst.Trapped);
+                final XMPProperty trapped = meta.getProperty(XMPConst.NS_PDF, PdfConst.Trapped);
                 if (trapped != null) {
                     info.setTrapped(new PdfName(trapped.getValue()));
                 }
-            } catch (XMPException ignored) {
+            } catch (final XMPException ignored) {
             }
 
         }
     }
 
-    static void appendDocumentInfoToMetadata(PdfDocumentInfo info, XMPMeta xmpMeta) throws XMPException {
-        PdfDictionary docInfo = info.getPdfObject();
+    static void appendDocumentInfoToMetadata(final PdfDocumentInfo info, final XMPMeta xmpMeta) throws XMPException {
+        final PdfDictionary docInfo = info.getPdfObject();
         if (docInfo != null) {
             PdfName key;
             PdfObject obj;
             String value;
-            for (PdfName pdfName : docInfo.keySet()) {
+            for (final PdfName pdfName : docInfo.keySet()) {
                 key = pdfName;
                 obj = docInfo.get(key);
-                if (obj == null)
+                if (obj == null) {
                     continue;
+                }
                 if (obj.isString()) {
                     value = ((PdfString) obj).toUnicodeString();
                 } else if (obj.isName()) {
-                    value = ((PdfName)obj).getValue();
+                    value = ((PdfName) obj).getValue();
                 } else {
                     continue;
                 }
                 if (PdfName.Title.equals(key)) {
                     xmpMeta.setLocalizedText(XMPConst.NS_DC, PdfConst.Title, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT, value);
                 } else if (PdfName.Author.equals(key)) {
-                   // for (String v : value.split(",|;")) {
-                		String v = value;
+                    for (final String v : value.split(";")) {
                         if (v.trim().length() > 0) {
                             appendArrayItemIfDoesNotExist(xmpMeta, XMPConst.NS_DC, PdfConst.Creator, v.trim(), PropertyOptions.ARRAY_ORDERED);
                         }
-                   // }
+                    }
                 } else if (PdfName.Subject.equals(key)) {
                     xmpMeta.setLocalizedText(XMPConst.NS_DC, PdfConst.Description, XMPConst.X_DEFAULT, XMPConst.X_DEFAULT, value);
                 } else if (PdfName.Keywords.equals(key)) {
-                    for (String v : value.split(",|;")) {
+                    for (final String v : value.split(",|;")) {
                         if (v.trim().length() > 0) {
                             appendArrayItemIfDoesNotExist(xmpMeta, XMPConst.NS_DC, PdfConst.Subject, v.trim(), PropertyOptions.ARRAY);
                         }
@@ -158,22 +158,22 @@ class XmpMetaInfoConverter {
         }
     }
 
-    private static void appendArrayItemIfDoesNotExist(XMPMeta meta, String ns, String arrayName, String value, int arrayOption) throws XMPException {
-        int currentCnt = meta.countArrayItems(ns, arrayName);
+    private static void appendArrayItemIfDoesNotExist(final XMPMeta meta, final String ns, final String arrayName, final String value, final int arrayOption)
+            throws XMPException {
+        final int currentCnt = meta.countArrayItems(ns, arrayName);
         for (int i = 0; i < currentCnt; i++) {
-            XMPProperty item = meta.getArrayItem(ns, arrayName, i + 1);
-            if (value.equals(item.getValue())) {
+            final XMPProperty item = meta.getArrayItem(ns, arrayName, i + 1);
+            if (value.equals(item.getValue()))
                 return;
-            }
         }
         meta.appendArrayItem(ns, arrayName, new PropertyOptions(arrayOption), value, null);
     }
 
-    private static String fetchArrayIntoString(XMPMeta meta, String ns, String arrayName) throws XMPException {
-        int keywordsCnt = meta.countArrayItems(ns, arrayName);
+    private static String fetchArrayIntoString(final XMPMeta meta, final String ns, final String arrayName) throws XMPException {
+        final int keywordsCnt = meta.countArrayItems(ns, arrayName);
         StringBuilder sb = null;
         for (int i = 0; i < keywordsCnt; i++) {
-            XMPProperty curKeyword = meta.getArrayItem(ns, arrayName, i + 1);
+            final XMPProperty curKeyword = meta.getArrayItem(ns, arrayName, i + 1);
             if (sb == null) {
                 sb = new StringBuilder();
             } else if (sb.length() > 0) {
