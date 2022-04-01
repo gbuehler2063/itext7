@@ -2160,7 +2160,7 @@ public class PdfDocument implements IEventDispatcher, Closeable, Serializable {
                     }
                 }
 
-                if (!properties.signingMode && writer.properties != null) {
+                if (writer.properties != null) {
                     final PdfString readerModifiedId = modifiedDocumentId;
                     if (writer.properties.initialDocumentId != null
                             && !(reader != null && reader.decrypt != null && (properties.appendMode || properties.preserveEncryption))) {
