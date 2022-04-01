@@ -47,56 +47,55 @@ import java.io.Serializable;
 
 public class StampingProperties extends DocumentProperties implements Serializable {
 
-	private static final long serialVersionUID = 6108082513101777457L;
+    private static final long serialVersionUID = 6108082513101777457L;
 
-	protected boolean appendMode = false;
-	protected boolean preserveEncryption = false;
-	protected boolean signingMode = false;
+    protected boolean appendMode = false;
+    protected boolean preserveEncryption = false;
+    protected boolean signingMode = false;
 
-	public StampingProperties() {
-	}
+    public StampingProperties() {
+    }
 
-	public StampingProperties(StampingProperties other) {
-		super(other);
-		this.appendMode = other.appendMode;
-		this.preserveEncryption = other.preserveEncryption;
-		this.signingMode = other.signingMode;
-	}
+    public StampingProperties(final StampingProperties other) {
+        super(other);
+        this.appendMode = other.appendMode;
+        this.preserveEncryption = other.preserveEncryption;
+        this.signingMode = other.signingMode;
+    }
 
-	/**
-	 * Defines if the document will be edited in append mode.
-	 * 
-	 * @return this {@link StampingProperties} instance
-	 */
-	public StampingProperties useAppendMode() {
-		appendMode = true;
-		signingMode = true;  // TEMP: includes it -> remove this laster 
-		return this;
-	}
+    /**
+     * Defines if the document will be edited in append mode.
+     * 
+     * @return this {@link StampingProperties} instance
+     */
+    public StampingProperties useAppendMode() {
+        appendMode = true;
+        return this;
+    }
 
-	/**
-	 * Defines if the encryption of the original document (if it was encrypted) will
-	 * be preserved. By default, the resultant document doesn't preserve the
-	 * original encryption.
-	 * 
-	 * @return this {@link StampingProperties} instance
-	 */
-	public StampingProperties preserveEncryption() {
-		this.preserveEncryption = true;
-		return this;
-	}
+    /**
+     * Defines if the encryption of the original document (if it was encrypted)
+     * will be preserved. By default, the resultant document doesn't preserve
+     * the original encryption.
+     * 
+     * @return this {@link StampingProperties} instance
+     */
+    public StampingProperties preserveEncryption() {
+        this.preserveEncryption = true;
+        return this;
+    }
 
-	/**
-	 * Defines if the document will be signing only. This will include append mode.
-	 * No meta data changes or other changes are allowed between signatures, 
-	 * except the signature related objects itself and trailer. This will allow to facilitate 
-	 * detection of PDF attacks.
-	 * 
-	 * @return this {@link StampingProperties} instance
-	 */
-	public StampingProperties useSigningMode() {
-		appendMode = true; // includes append mode
-		signingMode = true;
-		return this;
-	}
+    /**
+     * Defines if the document will be signing only. This will include append
+     * mode. No meta data changes or other changes are allowed between
+     * signatures, except the signature related objects itself and trailer. This
+     * will allow to facilitate detection of PDF attacks.
+     * 
+     * @return this {@link StampingProperties} instance
+     */
+    public StampingProperties useSigningMode() {
+        appendMode = true; // includes append mode
+        signingMode = true;
+        return this;
+    }
 }

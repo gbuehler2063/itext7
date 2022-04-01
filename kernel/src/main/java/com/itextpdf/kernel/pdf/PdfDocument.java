@@ -2116,15 +2116,6 @@ public class PdfDocument implements IEventDispatcher, Closeable, Serializable {
                     }
                 }
 
-                // TODO-BEGIN: still needed?
-                // final PdfObject infoDict = trailer.get(PdfName.Info);
-                // info = new PdfDocumentInfo(infoDict instanceof PdfDictionary
-                // ? (PdfDictionary) infoDict : new PdfDictionary(), this);
-                // if (!properties.signingMode) {
-                // XmpMetaInfoConverter.appendMetadataToInfo(xmpMetadata, info);
-                // }
-                // TODO-END: still needed?
-
                 if (!properties.signingMode) {
                     final PdfDictionary str = catalog.getPdfObject().getAsDictionary(PdfName.StructTreeRoot);
                     if (str != null) {
@@ -2133,12 +2124,10 @@ public class PdfDocument implements IEventDispatcher, Closeable, Serializable {
                 } // else we do not init tag structure, because for signing we
                   // don't want to modify it
 
-                // we allow a rebuild even in append mode: the following can be
-                // removed
-                // if (properties.appendMode && (reader.hasRebuiltXref() ||
-                // reader.hasFixedXref()))
-                // throw new
-                // PdfException(PdfException.AppendModeRequiresADocumentWithoutErrorsEvenIfRecoveryWasPossible);
+                // TODO: should we allow a rebuild even in append mode?
+                // Then the following can be removed.
+                if (properties.appendMode && (reader.hasRebuiltXref() || reader.hasFixedXref()))
+                    throw new PdfException(PdfException.AppendModeRequiresADocumentWithoutErrorsEvenIfRecoveryWasPossible);
             }
             xref.initFreeReferencesList(this);
             if (writer != null) {
