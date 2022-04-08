@@ -42,16 +42,7 @@
  */
 package com.itextpdf.kernel.geom;
 
-import com.itextpdf.kernel.PdfException;
-import com.itextpdf.kernel.pdf.PdfArray;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfPage;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.test.ExtendedITextTest;
-import com.itextpdf.test.annotations.type.UnitTest;
-
 import java.io.ByteArrayOutputStream;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,13 +51,21 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
+import com.itextpdf.kernel.PdfException;
+import com.itextpdf.kernel.pdf.PdfArray;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.test.ExtendedITextTest;
+import com.itextpdf.test.annotations.type.UnitTest;
+
 @Category(UnitTest.class)
 public class RectangleTest extends ExtendedITextTest {
     private static final float OVERLAP_EPSILON = 0.1f;
 
     @Test
     public void overlapWithEpsilon() {
-        Rectangle first = new Rectangle(0, 0, 10, 10);
+        final Rectangle first = new Rectangle(0, 0, 10, 10);
         Rectangle second = new Rectangle(-10, 0, 10.09f, 5);
 
         Assert.assertFalse(first.overlaps(second, OVERLAP_EPSILON));
@@ -91,7 +90,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void overlapWithNegativeEpsilon() {
-        Rectangle first = new Rectangle(0, 0, 10, 10);
+        final Rectangle first = new Rectangle(0, 0, 10, 10);
         Rectangle second = new Rectangle(-10, 0, 9.89f, 5);
 
         Assert.assertFalse(first.overlaps(second, -OVERLAP_EPSILON));
@@ -116,19 +115,19 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void rectangleOverlapTest01() {
-        //Intersection
+        // Intersection
         Rectangle one = new Rectangle(0, 0, 10, 10);
         Rectangle two = new Rectangle(5, 5, 5, 5);
         boolean result = one.overlaps(two);
         Assert.assertTrue(result);
 
-        //envelopment
+        // envelopment
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(2, 2, 5, 5);
         result = one.overlaps(two);
         Assert.assertTrue(result);
 
-        //identical
+        // identical
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(0, 0, 10, 10);
         result = one.overlaps(two);
@@ -138,54 +137,54 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void rectangleOverlapTest02() {
-        //Left
-        //Top left
+        // Left
+        // Top left
         Rectangle one = new Rectangle(0, 0, 10, 10);
         Rectangle two = new Rectangle(15, 15, 10, 10);
         boolean result = one.overlaps(two);
         Assert.assertFalse(result);
-        //Middle left
+        // Middle left
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(15, 5, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
-        //Lower left
+        // Lower left
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(15, -5, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
 
-        //Bottom
-        //Bottom left
+        // Bottom
+        // Bottom left
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(5, -15, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
-        //Bottom right
+        // Bottom right
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(-5, -15, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
 
-        //Right
-        //Lower right
+        // Right
+        // Lower right
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(-15, -5, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
-        //Upper right
+        // Upper right
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(-15, 5, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
 
-        //Top
-        //Top right
+        // Top
+        // Top right
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(-5, 15, 10, 10);
         result = one.overlaps(two);
         Assert.assertFalse(result);
-        //Top left
+        // Top left
         one = new Rectangle(0, 0, 10, 10);
         two = new Rectangle(5, 15, 10, 10);
         result = one.overlaps(two);
@@ -193,147 +192,148 @@ public class RectangleTest extends ExtendedITextTest {
 
     }
 
-
     @Test
     public void envelopTest01() {
-        //one contains two
-        Rectangle one = new Rectangle(0, 0, 10, 10);
-        Rectangle two = new Rectangle(5, 5, 5, 5);
-        boolean result = one.contains(two);
+        // one contains two
+        final Rectangle one = new Rectangle(0, 0, 10, 10);
+        final Rectangle two = new Rectangle(5, 5, 5, 5);
+        final boolean result = one.contains(two);
         Assert.assertTrue(result);
     }
 
     @Test
     public void envelopsTest02() {
-        //two identical rectangles
-        Rectangle one = new Rectangle(0, 0, 10, 10);
-        Rectangle two = new Rectangle(0, 0, 10, 10);
-        boolean result = one.contains(two);
+        // two identical rectangles
+        final Rectangle one = new Rectangle(0, 0, 10, 10);
+        final Rectangle two = new Rectangle(0, 0, 10, 10);
+        final boolean result = one.contains(two);
         Assert.assertTrue(result);
 
     }
 
     @Test
     public void envelopsTest03() {
-        //One intersects two but does not envelop
-        Rectangle one = new Rectangle(0, 0, 10, 10);
-        Rectangle two = new Rectangle(5, 5, 10, 10);
-        boolean result = one.contains(two);
+        // One intersects two but does not envelop
+        final Rectangle one = new Rectangle(0, 0, 10, 10);
+        final Rectangle two = new Rectangle(5, 5, 10, 10);
+        final boolean result = one.contains(two);
         Assert.assertFalse(result);
     }
 
     @Test
     public void envelopsTest04() {
-        //one and two do not
-        Rectangle one = new Rectangle(0, 0, 10, 10);
-        Rectangle two = new Rectangle(-15, -15, 10, 10);
-        boolean result = one.contains(two);
+        // one and two do not
+        final Rectangle one = new Rectangle(0, 0, 10, 10);
+        final Rectangle two = new Rectangle(-15, -15, 10, 10);
+        final boolean result = one.contains(two);
         Assert.assertFalse(result);
     }
 
     @Test
     public void getIntersectionTest01() {
-        //Cases where there is an intersection rectangle
+        // Cases where there is an intersection rectangle
         Rectangle main, second, actual, expected;
         boolean areEqual;
         main = new Rectangle(2, 2, 8, 8);
-        //A. Main rectangle is greater in both dimension than second rectangle
+        // A. Main rectangle is greater in both dimension than second rectangle
         second = new Rectangle(4, 8, 4, 4);
-        //1.Middle top
+        // 1.Middle top
         expected = new Rectangle(4, 8, 4, 2);
         actual = main.getIntersection(second);
         areEqual = expected.equalsWithEpsilon(actual);
-        //2.Middle Right
+        // 2.Middle Right
         second.moveRight(4);
         expected = new Rectangle(8, 8, 2, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //3.Right middle
+        // 3.Right middle
         second.moveDown(4);
         expected = new Rectangle(8, 4, 2, 4);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //4.Bottom right
+        // 4.Bottom right
         second.moveDown(4);
         expected = new Rectangle(8, 2, 2, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //5.Bottom middle
+        // 5.Bottom middle
         second.moveLeft(4);
         expected = new Rectangle(4, 2, 4, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //6.Bottom Left
+        // 6.Bottom Left
         second.moveLeft(4);
         expected = new Rectangle(2, 2, 2, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //7.Left Middle
+        // 7.Left Middle
         second.moveUp(4);
         expected = new Rectangle(2, 4, 2, 4);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //8.Left Top
+        // 8.Left Top
         second.moveUp(4);
         expected = new Rectangle(2, 8, 2, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //B. Main rectangle is greater in width but not height than second rectangle
-        //1. Left
+        // B. Main rectangle is greater in width but not height than second
+        // rectangle
+        // 1. Left
         second = new Rectangle(0, 0, 4, 12);
         expected = new Rectangle(2, 2, 2, 8);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //2. Middle
+        // 2. Middle
         second.moveRight(4);
         expected = new Rectangle(4, 2, 4, 8);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //3. Right
+        // 3. Right
         second.moveRight(4);
         expected = new Rectangle(8, 2, 2, 8);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //C. Main rectangle is greater in height but not width than second rectangle
-        //1. Top
+        // C. Main rectangle is greater in height but not width than second
+        // rectangle
+        // 1. Top
         second = new Rectangle(0, 8, 12, 4);
         expected = new Rectangle(2, 8, 8, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //2. Middle
+        // 2. Middle
         second.moveDown(4);
         expected = new Rectangle(2, 4, 8, 4);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //3. Bottom
+        // 3. Bottom
         second.moveDown(4);
         expected = new Rectangle(2, 2, 8, 2);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
 
-        //Check if any have failed
+        // Check if any have failed
         Assert.assertTrue(areEqual);
     }
 
     @Test
     public void getIntersectionTest02() {
-        //Cases where the two rectangles do not intersect
+        // Cases where the two rectangles do not intersect
         Rectangle main, second, actual;
         boolean noIntersection;
         main = new Rectangle(2, 2, 8, 8);
-        //Top
+        // Top
         second = new Rectangle(4, 12, 4, 4);
         actual = main.getIntersection(second);
         noIntersection = actual == null;
-        //Right
+        // Right
         second = new Rectangle(12, 4, 4, 4);
         actual = main.getIntersection(second);
         noIntersection = noIntersection && ((actual) == null);
-        //Bottom
+        // Bottom
         second = new Rectangle(4, -8, 4, 4);
         actual = main.getIntersection(second);
         noIntersection = noIntersection && ((actual) == null);
-        //Left
+        // Left
         second = new Rectangle(-8, 4, 4, 4);
         actual = main.getIntersection(second);
         noIntersection = noIntersection && ((actual) == null);
@@ -343,8 +343,8 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void getIntersectionTest03() {
-        //Edge cases: envelopment
-        //A equal rectangles
+        // Edge cases: envelopment
+        // A equal rectangles
         Rectangle main, second, actual, expected;
         boolean areEqual;
         main = new Rectangle(2, 2, 8, 8);
@@ -352,13 +352,13 @@ public class RectangleTest extends ExtendedITextTest {
         expected = new Rectangle(main);
         actual = main.getIntersection(second);
         areEqual = expected.equalsWithEpsilon(actual);
-        //B main contains second
+        // B main contains second
         main = new Rectangle(2, 2, 8, 8);
         second = new Rectangle(4, 4, 4, 4);
         expected = new Rectangle(second);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //C second contains main
+        // C second contains main
         main = new Rectangle(2, 2, 8, 8);
         second = new Rectangle(0, 0, 12, 12);
         expected = new Rectangle(main);
@@ -370,47 +370,47 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void getIntersectionTest04() {
-        //Edge case: intersections on edges
+        // Edge case: intersections on edges
         Rectangle main, second, actual, expected;
         boolean areEqual;
         main = new Rectangle(2, 2, 8, 8);
-        //Top
+        // Top
         second = new Rectangle(4, 10, 4, 4);
         expected = new Rectangle(4, 10, 4, 0);
         actual = main.getIntersection(second);
         areEqual = expected.equalsWithEpsilon(actual);
-        //Right
+        // Right
         second = new Rectangle(10, 4, 4, 4);
         expected = new Rectangle(10, 4, 0, 4);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Bottom
+        // Bottom
         second = new Rectangle(4, -2, 4, 4);
         expected = new Rectangle(4, 2, 4, 0);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Left
+        // Left
         second = new Rectangle(-2, 4, 4, 4);
         expected = new Rectangle(2, 4, 0, 4);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Edge case: intersection on corners
-        //Top-Left
+        // Edge case: intersection on corners
+        // Top-Left
         second = new Rectangle(-2, 10, 4, 4);
         expected = new Rectangle(2, 10, 0, 0);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Top-Right
+        // Top-Right
         second = new Rectangle(10, 10, 4, 4);
         expected = new Rectangle(10, 10, 0, 0);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Bottom-Right
+        // Bottom-Right
         second = new Rectangle(10, -2, 4, 4);
         expected = new Rectangle(10, 2, 0, 0);
         actual = main.getIntersection(second);
         areEqual = areEqual && (expected.equalsWithEpsilon(actual));
-        //Bottom-Left
+        // Bottom-Left
         second = new Rectangle(-2, -2, 4, 4);
         expected = new Rectangle(2, 2, 0, 0);
         actual = main.getIntersection(second);
@@ -421,25 +421,25 @@ public class RectangleTest extends ExtendedITextTest {
     @Test
     public void createBoundingRectangleFromQuadPointsTest01() {
         Rectangle actual, expected;
-        float[] points = {0, 0, 2, 1, 1, 2, -2, 1};
-        PdfArray quadpoints = new PdfArray(points);
+        final float[] points = { 0, 0, 2, 1, 1, 2, -2, 1 };
+        final PdfArray quadpoints = new PdfArray(points);
 
         expected = new Rectangle(-2, 0, 4, 2);
         actual = Rectangle.createBoundingRectangleFromQuadPoint(quadpoints);
-        Boolean areEqual = expected.equalsWithEpsilon(actual);
+        final Boolean areEqual = expected.equalsWithEpsilon(actual);
         Assert.assertTrue(areEqual);
 
     }
 
     @Test
     public void createBoundingRectangleFromQuadPointsTest02() {
-        float[] points = {0, 0, 2, 1, 1, 2, -2, 1, 0};
-        PdfArray quadpoints = new PdfArray(points);
+        final float[] points = { 0, 0, 2, 1, 1, 2, -2, 1, 0 };
+        final PdfArray quadpoints = new PdfArray(points);
 
         boolean exception = false;
         try {
             Rectangle.createBoundingRectangleFromQuadPoint(quadpoints);
-        } catch (PdfException e) {
+        } catch (final PdfException e) {
             exception = true;
         }
 
@@ -450,10 +450,9 @@ public class RectangleTest extends ExtendedITextTest {
     public void createBoundingRectanglesFromQuadPointsTest01() {
         List<Rectangle> actual, expected;
         boolean areEqual = true;
-        float[] points = {0, 0, 2, 1, 1, 2, -2, 1,
-                0, -1, 2, 0, 1, 1, -2, 0};
-        PdfArray quadpoints = new PdfArray(points);
-        expected = new ArrayList<Rectangle>();
+        final float[] points = { 0, 0, 2, 1, 1, 2, -2, 1, 0, -1, 2, 0, 1, 1, -2, 0 };
+        final PdfArray quadpoints = new PdfArray(points);
+        expected = new ArrayList<>();
         expected.add(new Rectangle(-2, 0, 4, 2));
         expected.add(new Rectangle(-2, -1, 4, 2));
         actual = Rectangle.createBoundingRectanglesFromQuadPoint(quadpoints);
@@ -465,14 +464,12 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void createBoundingRectanglesFromQuadPointsTest02() {
-        float[] points = {0, 0, 2, 1, 1, 2, -2, 1,
-                0, -1, 2, 0, 1, 1, -2, 0,
-                1};
-        PdfArray quadpoints = new PdfArray(points);
+        final float[] points = { 0, 0, 2, 1, 1, 2, -2, 1, 0, -1, 2, 0, 1, 1, -2, 0, 1 };
+        final PdfArray quadpoints = new PdfArray(points);
         boolean exception = false;
         try {
             Rectangle.createBoundingRectanglesFromQuadPoint(quadpoints);
-        } catch (PdfException e) {
+        } catch (final PdfException e) {
             exception = true;
         }
 
@@ -481,14 +478,15 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void translateOnRotatedPageTest01() {
-        // we need a page with set rotation and page size to test Rectangle#getRectangleOnRotatedPage
-        PdfDocument pdfDocument = new PdfDocument(new PdfWriter(new ByteArrayOutputStream()));
+        // we need a page with set rotation and page size to test
+        // Rectangle#getRectangleOnRotatedPage
+        final PdfDocument pdfDocument = new PdfDocument(new PdfWriter(new ByteArrayOutputStream()));
 
-        PdfPage page = pdfDocument.addNewPage();
+        final PdfPage page = pdfDocument.addNewPage();
         Assert.assertTrue(PageSize.A4.equalsWithEpsilon(page.getPageSize()));
 
         // Test rectangle
-        Rectangle testRectangle = new Rectangle(200, 200, 100, 200);
+        final Rectangle testRectangle = new Rectangle(200, 200, 100, 200);
 
         Assert.assertEquals(0, page.getRotation());
         Assert.assertTrue(new Rectangle(200, 200, 100, 200).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
@@ -511,12 +509,43 @@ public class RectangleTest extends ExtendedITextTest {
     }
 
     @Test
+    public void translateOnRotatedPageTest02() {
+        // we need a page with set rotation and page size to test
+        // Rectangle#getRectangleOnRotatedPage
+        final PdfDocument pdfDocument = new PdfDocument(new PdfWriter(new ByteArrayOutputStream()));
+
+        final PdfPage page = pdfDocument.addNewPage();
+        Assert.assertTrue(PageSize.A4.equalsWithEpsilon(page.getPageSize()));
+
+        // Test rectangle - we use different values for x,y,w,h
+        final Rectangle testRectangle = new Rectangle(240, 30, 250, 38);
+
+        Assert.assertEquals(0, page.getRotation());
+        Assert.assertTrue(new Rectangle(240, 30, 250, 38).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
+
+        page.setRotation(90);
+        Assert.assertEquals(90, page.getRotation());
+        Assert.assertTrue(new Rectangle(527, 240, 38, 250).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
+
+        page.setRotation(180);
+        Assert.assertEquals(180, page.getRotation());
+        Assert.assertTrue(new Rectangle(105, 774, 250, 38).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
+
+        page.setRotation(270);
+        Assert.assertEquals(270, page.getRotation());
+        Assert.assertTrue(new Rectangle(30, 352, 38, 250).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
+
+        page.setRotation(360);
+        Assert.assertEquals(0, page.getRotation());
+        Assert.assertTrue(new Rectangle(240, 30, 250, 38).equalsWithEpsilon(Rectangle.getRectangleOnRotatedPage(testRectangle, page)));
+    }
+
+    @Test
     public void calculateBBoxTest() {
         Point a = new Point(100, 100);
         Point b = new Point(200, 100);
         Point c = new Point(200, 200);
         Point d = new Point(100, 200);
-
 
         // Zero rotation
         Rectangle.calculateBBox(Arrays.asList(a, b, c, d));
@@ -547,13 +576,13 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setBBoxWithoutNormalizationTest() {
-        Rectangle rectangle = new Rectangle(0, 0, 100, 200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getX(), 1e-5);
         Assert.assertEquals(0, rectangle.getY(), 1e-5);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
-        //set bBox without any normalization needed
+        // set bBox without any normalization needed
         rectangle.setBbox(10, 10, 90, 190);
         Assert.assertEquals(10, rectangle.getX(), 1e-5);
         Assert.assertEquals(10, rectangle.getY(), 1e-5);
@@ -563,13 +592,13 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setBBoxNormalizeXTest() {
-        Rectangle rectangle = new Rectangle(0, 0, 100, 200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getX(), 1e-5);
         Assert.assertEquals(0, rectangle.getY(), 1e-5);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
-        //set bBox where llx > urx
+        // set bBox where llx > urx
         rectangle.setBbox(90, 10, 10, 190);
         Assert.assertEquals(10, rectangle.getX(), 1e-5);
         Assert.assertEquals(10, rectangle.getY(), 1e-5);
@@ -579,13 +608,13 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setBBoxNormalizeYTest() {
-        Rectangle rectangle = new Rectangle(0, 0, 100, 200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getX(), 1e-5);
         Assert.assertEquals(0, rectangle.getY(), 1e-5);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
-        //set bBox where lly > ury
+        // set bBox where lly > ury
         rectangle.setBbox(10, 190, 90, 10);
         Assert.assertEquals(10, rectangle.getX(), 1e-5);
         Assert.assertEquals(10, rectangle.getY(), 1e-5);
@@ -595,7 +624,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setXTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getX(), 1e-5);
 
         rectangle.setX(50);
@@ -604,7 +633,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setYTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getY(), 1e-5);
 
         rectangle.setY(50);
@@ -613,7 +642,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setWidthTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
 
         rectangle.setWidth(50);
@@ -622,7 +651,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void setHeightTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
         rectangle.setHeight(50);
@@ -631,7 +660,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void increaseHeightTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
         rectangle.increaseHeight(50);
@@ -640,7 +669,7 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void decreaseHeightTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
         rectangle.decreaseHeight(50);
@@ -649,14 +678,14 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void applyMarginsShrinkTest() {
-        Rectangle rectangle = new Rectangle(0,0,100,200);
+        final Rectangle rectangle = new Rectangle(0, 0, 100, 200);
         Assert.assertEquals(0, rectangle.getX(), 1e-5);
         Assert.assertEquals(0, rectangle.getY(), 1e-5);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
-        //shrink the rectangle
-        rectangle.applyMargins(20,20,20,20, false);
+        // shrink the rectangle
+        rectangle.applyMargins(20, 20, 20, 20, false);
         Assert.assertEquals(20, rectangle.getX(), 1e-5);
         Assert.assertEquals(20, rectangle.getY(), 1e-5);
         Assert.assertEquals(60, rectangle.getWidth(), 1e-5);
@@ -665,14 +694,14 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void applyMarginsExpandTest() {
-        Rectangle rectangle = new Rectangle(20,20,100,200);
+        final Rectangle rectangle = new Rectangle(20, 20, 100, 200);
         Assert.assertEquals(20, rectangle.getX(), 1e-5);
         Assert.assertEquals(20, rectangle.getY(), 1e-5);
         Assert.assertEquals(100, rectangle.getWidth(), 1e-5);
         Assert.assertEquals(200, rectangle.getHeight(), 1e-5);
 
-        //expand the rectangle
-        rectangle.applyMargins(10,10,10,10, true);
+        // expand the rectangle
+        rectangle.applyMargins(10, 10, 10, 10, true);
         Assert.assertEquals(10, rectangle.getX(), 1e-5);
         Assert.assertEquals(10, rectangle.getY(), 1e-5);
         Assert.assertEquals(120, rectangle.getWidth(), 1e-5);
@@ -681,33 +710,34 @@ public class RectangleTest extends ExtendedITextTest {
 
     @Test
     public void toStringTest() {
-        Rectangle rectangle = new Rectangle(0, 0, 100f, 200f);
-        String rectangleString = rectangle.toString();
-        //Using contains() to check for value instead of equals() on the whole string due to the
-        //differences between decimal numbers formatting in java and .NET.
+        final Rectangle rectangle = new Rectangle(0, 0, 100f, 200f);
+        final String rectangleString = rectangle.toString();
+        // Using contains() to check for value instead of equals() on the whole
+        // string due to the
+        // differences between decimal numbers formatting in java and .NET.
         Assert.assertTrue(rectangleString.contains("100"));
         Assert.assertTrue(rectangleString.contains("200"));
     }
 
     @Test
     public void cloneTest() {
-        PageSize originalPageSize = new PageSize(15, 20);
-        PageSize copyAsPageSize = (PageSize) originalPageSize.clone();
-        Rectangle copyAsRectangle = ((Rectangle) originalPageSize).clone();
+        final PageSize originalPageSize = new PageSize(15, 20);
+        final PageSize copyAsPageSize = (PageSize) originalPageSize.clone();
+        final Rectangle copyAsRectangle = ((Rectangle) originalPageSize).clone();
         Assert.assertEquals(PageSize.class, copyAsPageSize.getClass());
         Assert.assertEquals(PageSize.class, copyAsRectangle.getClass());
     }
 
     @Test
     public void decreaseWidthTest() {
-        Rectangle rectangle = new Rectangle(100, 200);
+        final Rectangle rectangle = new Rectangle(100, 200);
         rectangle.decreaseWidth(10);
         Assert.assertEquals(90, rectangle.getWidth(), Rectangle.EPS);
     }
-    
+
     @Test
     public void increaseWidthTest() {
-        Rectangle rectangle = new Rectangle(100, 200);
+        final Rectangle rectangle = new Rectangle(100, 200);
         rectangle.increaseWidth(10);
         Assert.assertEquals(110, rectangle.getWidth(), Rectangle.EPS);
     }
